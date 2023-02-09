@@ -5,7 +5,6 @@ pipeline {
     }
     environment {
         registry = '868016059835.dkr.ecr.us-east-1.amazonaws.com/geolocation_ecr_rep'
-        registryCredential = 'andrew'
         dockerimage = ''
   }
     stages {
