@@ -25,6 +25,11 @@ pipeline {
                 sh 'mvn test'
             }
         }
+	stage ('CHECKSTYLE'){
+            steps {
+                sh 'mvn checkstyle:checkstyle'
+            }
+	}
         stage('Build Image') {
             steps {
                 script{
@@ -42,12 +47,12 @@ pipeline {
             }
         }
         stage ("Kube Deploy") {
-            kubernetesDeploy(
-	                 configs: "eks-deploy-from-ecr.yaml",
-	                 kubeconfigId: "eks_credential",
-	                 enableConfigSubstitution: true
-	                 )
-	}
+            steps {
+                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'eks_credential', namespace: '', serverUrl: '') {
+                 sh "kubectl apply -f eks-deploy-from-ecr.yaml"
+                }
+            }
+        }
     }
 }
 
