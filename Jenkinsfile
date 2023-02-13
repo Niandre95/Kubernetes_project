@@ -36,9 +36,15 @@ pipeline {
             steps{
                 script{ 
                     docker.withRegistry("https://"+registry,"ecr:us-east-1:"+registryCredential) {
-                        dockerImage.push("$BUILD_NUMBER")
                 		dockerImage.push('latest')
                     }
+                }
+            }
+        }
+        stage ("Kube Deploy") {
+            steps {
+                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'eks_credential', namespace: '', serverUrl: '') {
+                 sh "kubectl apply -f eks-deploy-from-ecr.yaml"
                 }
             }
         }
