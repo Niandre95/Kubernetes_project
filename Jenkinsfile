@@ -47,6 +47,7 @@ pipeline {
 	                 kubeconfigId: "eks_credential",
 	                 enableConfigSubstitution: true
 	                 )
+	}
     }
 }
 
